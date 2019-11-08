@@ -35,7 +35,7 @@ public class CreateAccountTests extends BaseTest {
 
     @DataProvider( name = "createAccountDataProvider" )
     public Object[][] testCreateAccountDataProvider() {
-
+        //TODO move test data to external files
         Address address = Address.builder()
                 .address( "2400 W 17th St" )
                 .city( "Wilmington" )
@@ -61,7 +61,8 @@ public class CreateAccountTests extends BaseTest {
     void testCreateAccount( Account account ){
         log.info( "'Create Account' test started." );
 
-        homePage.openPage();
+
+        homePage.openPage(); //TODO move to the BaseTest class
         topBar.signIn();
         signInPage.signUpWithEmail( account.getEmail() );
         createAccountPage.registerAccount( account );

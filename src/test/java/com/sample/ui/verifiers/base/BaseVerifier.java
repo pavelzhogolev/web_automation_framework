@@ -16,6 +16,7 @@ public class BaseVerifier {
     @Autowired
     protected WebDriver webDriver;
 
+    //TODO add common parent class to provide functionality common for both handlers/verifiers
     public void waitForPageLoaded() {
         log.debug( "Wait for page to open." );
         WebDriverWait wait = new WebDriverWait( webDriver, 60 );
