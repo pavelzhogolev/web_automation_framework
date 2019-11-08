@@ -7,6 +7,8 @@ import lombok.Getter;
 @Builder
 public class Account {
 
+    private String gender;
+
     private String firstName;
 
     private String lastName;

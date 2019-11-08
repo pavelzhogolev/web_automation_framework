@@ -8,8 +8,7 @@ import lombok.Getter;
 
 @Getter
 @Component
-public class HomePage extends BasePage {
+public class AccountDetailsPage extends BasePage {
 
-    public String pageUrl = "";
-
+    private String pageUrl = "?controller=my-account";
 }

@@ -1,25 +1,24 @@
-package com.sample.ui.verifiers;
+package com.sample.ui.verifiers.base;
 
-import com.sample.framework.ec.PageLoaded;
-import com.sample.ui.pages.CreateAccountPage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.sample.framework.ec.PageLoaded;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Component
-public class CreateAccountPageVerifier {
+public class BaseVerifier {
 
     @Autowired
     protected WebDriver webDriver;
 
-    @Autowired
-    private CreateAccountPage createAccountPage;
-
-    public boolean isCurrentPage() {
+    public void waitForPageLoaded() {
+        log.debug( "Wait for page to open." );
         WebDriverWait wait = new WebDriverWait( webDriver, 60 );
         wait.until( new PageLoaded() );
-
-        return createAccountPage.getPageUrl().equals(webDriver.getCurrentUrl());
     }
 }

@@ -1,14 +1,17 @@
 package com.sample.tests;
 
+import com.sample.framework.utils.EmailGenerator;
 import com.sample.model.Account;
+import com.sample.model.Address;
 import com.sample.tests.base.BaseTest;
-import com.sample.ui.handler.HomePageHandler;
-import com.sample.ui.handler.SignInPageHandler;
-import com.sample.ui.pages.HomePage;
-import com.sample.ui.verifiers.CreateAccountPageVerifier;
+import com.sample.ui.handlers.CreateAccountPageHandler;
+import com.sample.ui.handlers.HomePageHandler;
+import com.sample.ui.handlers.SignInPageHandler;
+import com.sample.ui.handlers.TopBarHandler;
+import com.sample.ui.verifiers.TopBarVerifier;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -16,22 +19,42 @@ import org.testng.annotations.Test;
 public class CreateAccountTests extends BaseTest {
 
     @Autowired
-    private HomePage homePage;
+    private HomePageHandler homePage;
 
     @Autowired
-    private HomePageHandler homePageHandler;
+    private TopBarHandler topBar;
 
     @Autowired
-    private SignInPageHandler signInPageHandler;
+    private SignInPageHandler signInPage;
 
     @Autowired
-    private CreateAccountPageVerifier createAccountPageVerifier;
+    private CreateAccountPageHandler createAccountPage;
+
+    @Autowired
+    private TopBarVerifier topBarVerifier;
 
     @DataProvider( name = "createAccountDataProvider" )
     public Object[][] testCreateAccountDataProvider() {
-        return new Object[][] {
-                { Account.builder().email( "john.doe@test.com" ).build() }
-        };
+
+        Address address = Address.builder()
+                .address( "2400 W 17th St" )
+                .city( "Wilmington" )
+                .state( "Delaware" )
+                .postalCode( "19805" )
+                .mobilePhone( "89996664466" )
+                .alias( "Primary address" )
+                .build();
+
+        Account account = Account.builder()
+                .firstName( "John" )
+                .lastName( "Doe" )
+                .email( EmailGenerator.generateEmail() )
+                .password( "Mzaq1xsw2" )
+                .dateOfBirth( "01/01/1990" )
+                .address( address )
+                .build();
+
+        return new Object[][] {{ account }};
     }
 
     @Test( dataProvider = "createAccountDataProvider" )
@@ -39,10 +62,11 @@ public class CreateAccountTests extends BaseTest {
         log.info( "'Create Account' test started." );
 
         homePage.openPage();
-        homePageHandler.signIn();
-        signInPageHandler.createNewAccount( account.getEmail() );
+        topBar.signIn();
+        signInPage.signUpWithEmail( account.getEmail() );
+        createAccountPage.registerAccount( account );
 
-        Assert.assertTrue( createAccountPageVerifier.isCurrentPage(), "Create Account page is not opened." );
+        topBarVerifier.verifyAccountName( account ).assertAll();
 
         log.info( "'Create Account' test completed." );
     }
